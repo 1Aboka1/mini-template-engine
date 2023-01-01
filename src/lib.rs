@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 #[derive(Debug, PartialEq)]
 pub enum ContentType {
     Literal(String),
@@ -62,6 +64,22 @@ fn get_expression_data(input: &str) -> ExpressionData {
     let var = var.trim();
 
     ExpressionData { head: Some(head.to_string()), variable: var.to_string(), tail: Some(tail.to_string()) }
+}
+
+pub fn generate_html_template_var(content: ExpressionData, context: &HashMap<String, String>) -> String {
+    let mut html_line = String::new();
+
+    if let Some(h) = content.head {
+        html_line.push_str(&h);
+    }
+
+    html_line.push_str(context.get(&content.variable).unwrap());
+
+    if let Some(t) = content.tail {
+        html_line.push_str(&t);
+    }
+
+    html_line    
 }
 
 #[cfg(test)]
